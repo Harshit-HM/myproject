@@ -11,7 +11,7 @@ spec:
     metadata:
       labels:
         app: mysite
-    spec:
+    speci:
       containers:
       - name: mysite
         image: harshitp098/mysite:latest
