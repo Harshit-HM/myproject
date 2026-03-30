@@ -16,4 +16,5 @@ spec:
       - name: mysite
         image: harshitp098/mysite:latest
         ports:
-        - containerPort: 8000       
+        - containerPort: 80
+
