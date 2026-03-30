@@ -1,0 +1,42 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Clone Repository') {
+            steps {
+                echo 'Cloning project from GitHub...'
+                git branch: 'main', url: 'https://github.com/Harshit-HM/myproject.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                echo 'Building Docker image...'
+                sh '''
+                docker rmi -f harshitp098/mysite
+                docker build -t harshitp098/mysite .
+                docker push harshitp098/mysite
+                '''
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh '''
+                kubectl get nodes
+                cd k8s
+                kubectl apply -f .
+                nohup kubectl port-forward service/mysite-service 80:80 --address=0.0.0.0 &
+                '''
+            }
+        }
+
+    }
+
+    post {
+        always {
+            echo 'Pipeline execution completed!'
+        }
+    }
+}
